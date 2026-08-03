@@ -17,18 +17,16 @@ a React/Vite client and an Express/Node API server — carried over so tooling
 and conventions stay consistent across projects.
 
 ```
-/FRONTEND   React 19 + Vite 7 client
-/BACKEND    Express 5 + Node API, Mongoose models (not being built yet)
+/frontend   React 19 + Vite client
+/backend    Express 5 + Node API, Mongoose models (not being built yet)
 ```
 
-> **Status: frontend-only, greenfield.** We are currently building **only the
-> `/FRONTEND`** — a marketing site with no admin panel and no authentication.
-> There is no backend yet and no live API calls; content is static/local for
-> now. `/BACKEND` and its stack below are the _intended future_ target,
-> carried over from a sibling project — do not scaffold or build it until
-> asked. The frontend stack/conventions are not yet verified against a real
-> `package.json`. When scaffolding, follow them; if you deviate, update this
-> file in the same change.
+> **Status: frontend scaffolded, backend not started.** `/frontend` is
+> scaffolded (Vite + React 19 + Tailwind v4 + router + Vitest) with a
+> placeholder Header, Footer, and Home page — no admin panel, no
+> authentication, no live API calls. `/backend` and its stack below are the
+> _intended future_ target, carried over from a sibling project — do not
+> scaffold or build it until asked.
 
 ---
 
@@ -36,18 +34,21 @@ and conventions stay consistent across projects.
 
 | Concern   | Library                               | Notes that matter                                          |
 | --------- | ------------------------------------- | ---------------------------------------------------------- |
-| Build/dev | `vite` 7                              | ESM-only, fast HMR                                         |
+| Build/dev | `vite` 8                              | ESM-only, fast HMR                                         |
+| Lint      | `oxlint`                              | Scaffolded default — not eslint (was eslint in an older version of this doc) |
 | UI        | `react` / `react-dom` 19              | New JSX transform — no `import React` needed for JSX       |
 | Styling   | `tailwindcss` 4 + `@tailwindcss/vite` | **v4 — CSS-first config, NOT v3** (see below)              |
-| Routing   | `react-router-dom` 7                  | Data Router APIs available                                 |
+| Routing   | `react-router-dom` 7                  | Data Router APIs available. Pinned to latest 7.x — see security note below |
 | HTTP      | `axios` 1                             | Use one shared instance (see below)                        |
 | Forms     | `react-hook-form` 7                   | Uncontrolled-first; prefer over manual `useState` forms    |
 | Icons     | `react-icons` 5                       | Import per-icon from the specific set                      |
-| Tooltips  | `react-tooltip` 5                     |                                                            |
+| Tooltips  | `react-tooltip` 6                     | Bumped from v5 — confirm current API (`data-tooltip-id` etc.) against installed version before first use |
 | Toasts    | `react-hot-toast` (preferred)         | Use `react-hot-toast` for toasts; `react-toastify` removed |
 | Animation | `motion` (Framer Motion)              | **Default animation library** — use for all animations     |
-| Charts    | `recharts` 3                          | Default chart library                                      |
+| Charts    | `recharts` 3                          | Default chart library — **not installed yet** (skipped in the initial scaffold, add when a chart is actually needed) |
 | Tests     | `vitest` 4 + Testing Library + jsdom  | Config lives in `vite.config.js`                           |
+
+> **Security note:** `react-router-dom` is pinned to the latest 7.x release rather than an older patch. npm audit flags one high-severity advisory in recent 7.x (RSC-mode CSRF bypass — not applicable, this app doesn't use RSC), but every earlier 7.x patch is vulnerable to a much longer list of already-fixed CVEs (XSS, open redirect, DoS). Re-run `npm audit` before bumping/pinning this package again.
 
 ## Tech stack (backend — intended, not being built yet)
 
@@ -58,21 +59,21 @@ Express 5, Mongoose 9, `jsonwebtoken` + `bcrypt` (cookie auth), `multer` +
 `cloudinary` (image uploads), `resend` (email), `winston` (logging),
 `express-rate-limit`, `cors`, `cookie-parser`, `dotenv`. ESM (`"type": "module"`)
 — use `import`, not `require`. Tests: `vitest` + `supertest` +
-`mongodb-memory-server`, config in `BACKEND/vitest.config.js`.
+`mongodb-memory-server`, config in `backend/vitest.config.js`.
 
 ---
 
 ## Commands
 
 ```bash
-# Frontend (run inside /FRONTEND)
+# Frontend (run inside /frontend)
 npm run dev        # Vite dev server
 npm run build      # production build
 npm run preview    # preview the build
-npm run lint       # eslint
+npm run lint       # oxlint
 npm test           # vitest run
 
-# Backend (future — /BACKEND does not exist yet, not runnable today)
+# Backend (future — /backend does not exist yet, not runnable today)
 npm run dev        # nodemon index.js
 npm start          # node index.js
 npm run lint       # eslint
@@ -93,7 +94,7 @@ This project uses **Tailwind v4**, which is configured very differently from v3.
 Do **not** apply v3 patterns.
 
 - The Vite plugin (`@tailwindcss/vite`) handles everything. It's registered in
-  `FRONTEND/vite.config.js`:
+  `frontend/vite.config.js`:
 
   ```js
   import tailwindcss from "@tailwindcss/vite";
@@ -101,7 +102,7 @@ Do **not** apply v3 patterns.
   ```
 
 - There is no `tailwind.config.js`. Theme customization goes in CSS via
-  `@theme` in `FRONTEND/src/index.css`.
+  `@theme` in `frontend/src/index.css`.
 
 ### React 19
 
@@ -114,7 +115,7 @@ Do **not** apply v3 patterns.
 
 ### Routing (React Router v7)
 
-- Routes are centralized in `createBrowserRouter` in `FRONTEND/src/App.jsx`.
+- Routes are centralized in `createBrowserRouter` in `frontend/src/App.jsx`.
   Add new routes there; don't introduce a second `<Routes>` tree.
 - Use `<Link>` / `<NavLink>` for navigation and `useNavigate` for imperative
   navigation. Never use raw `<a href>` for internal routes.
@@ -124,10 +125,10 @@ Do **not** apply v3 patterns.
 ### Data fetching (Axios)
 
 > **Not needed yet.** There's no backend/API right now, so don't wire up
-> real requests — this pattern is for when `/BACKEND` exists.
+> real requests — this pattern is for when `/backend` exists.
 
 - Use a **single shared Axios instance** at
-  [FRONTEND/src/api/axiosApi.js](FRONTEND/src/api/axiosApi.js) — never bare
+  [frontend/src/api/axiosApi.js](frontend/src/api/axiosApi.js) — never bare
   `axios.get(...)` at call sites. Configure it with `withCredentials: true`
   (cookie auth) and a JSON `Content-Type`.
 - Put auth headers, error normalization, and 401 handling in **interceptors**,
@@ -146,8 +147,10 @@ Do **not** apply v3 patterns.
 
 - `react-icons`: import the specific icon from its set,
   e.g. `import { FiMenu } from 'react-icons/fi'`. Don't import the whole set.
-- `react-tooltip` v5 uses the `data-tooltip-id` API plus a single `<Tooltip />`
-  instance — not the legacy `data-tip` attribute.
+- Installed version is v6 (bumped from v5 during scaffolding). v5's
+  `data-tooltip-id` API plus a single `<Tooltip />` instance is the intended
+  pattern (not the legacy `data-tip` attribute) — confirm it's unchanged in
+  v6's docs before first use, since it hasn't been verified against v6 yet.
 
 ### Toasts (react-hot-toast)
 
@@ -158,11 +161,11 @@ Do **not** apply v3 patterns.
 
 ## Backend conventions (Express/Node) — future phase, not built yet
 
-> No `/BACKEND` work is in scope right now — no resources/models have been
+> No `/backend` work is in scope right now — no resources/models have been
 > decided yet. This section documents *structure and style* to follow
 > whenever backend work starts, not what to build.
 
-Target layout under `/BACKEND`:
+Target layout under `/backend`:
 
 ```
 index.js        server entry (starts HTTP server)
@@ -179,7 +182,7 @@ tests/          vitest + supertest + mongodb-memory-server
 
 - Keep route files thin; business logic goes in controllers, shared helpers in
   `utils/`. There is no separate `services/` layer — don't add one.
-- Mongoose schemas in `BACKEND/model`, one per file, named `xModel.js`.
+- Mongoose schemas in `backend/model`, one per file, named `xModel.js`.
 - All secrets and connection strings come from environment variables via
   `process.env`. **Never** commit or hardcode them, and never put them in client
   code (only `VITE_`-prefixed vars reach the browser, by design).
@@ -192,7 +195,7 @@ tests/          vitest + supertest + mongodb-memory-server
 
 ## Environments (MongoDB) — future phase, not set up yet
 
-There is no database, Atlas cluster, or `/BACKEND/.env` for this project yet.
+There is no database, Atlas cluster, or `/backend/.env` for this project yet.
 The dev/prod-separate-database pattern used on sibling projects (e.g. a shared
 Atlas cluster with distinct prod/dev database names) is the likely direction,
 but the actual cluster and db names for Timsies Entirety are undecided —
