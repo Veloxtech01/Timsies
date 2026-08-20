@@ -7,7 +7,10 @@ describe('App', () => {
     render(<App />)
     expect(screen.getByText('Timsies Entirety')).toBeInTheDocument()
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Welcome to Timsies Entirety' })
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Timsies Entirety — decluttering and organizing services',
+      })
     ).toBeInTheDocument()
     expect(screen.getByText('© 2026 Timsies Entirety')).toBeInTheDocument()
   })

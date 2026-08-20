@@ -1,1 +1,60 @@
+/* Google Fonts — "Geometric Modern" pairing: Outfit for headings/wordmark,
+   Work Sans for body/UI text. Aclonica is added just for the hero slide
+   titles. Must precede other rules per CSS @import rules. */
+@import url("https://fonts.googleapis.com/css2?family=Aclonica&family=Outfit:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap");
 @import "tailwindcss";
+
+/* Tailwind v4 is configured CSS-first — there is no tailwind.config.js.
+   Everything declared here becomes a utility (e.g. --color-primary-600 -> bg-primary-600). */
+@theme {
+  /* Primary brand blue — #1281AD is the registered primary colour.
+     `--color-primary` is the canonical token (bg-primary, text-primary);
+     the numbered ramp holds tints/shades for hovers, borders, and tinted fills. */
+  --color-primary: #1281ad;
+  --color-primary-50: #eff9fd;
+  --color-primary-100: #d7eef8;
+  --color-primary-200: #aeddf0;
+  --color-primary-400: #3ba3ce;
+  --color-primary-500: #1281ad;
+  --color-primary-600: #0f6d93;
+  --color-primary-700: #0c5878;
+  --color-primary-900: #06344a;
+
+  /* CTA green — reserved for primary actions so it stays high-signal */
+  --color-accent-500: #22c55e;
+  --color-accent-600: #16a34a;
+
+  /* Font families: font-heading for display text, font-sans as the default,
+     font-hero-title for the HeroSlider caption only */
+  --font-heading: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-hero-title: "Aclonica", ui-sans-serif, system-ui, sans-serif;
+
+  /* Testimonials marquee — CSS (not Framer Motion) so hover can pause via
+     animation-play-state and resume from the exact same frame, no JS state. */
+  --animate-testimonial-scroll: testimonial-scroll 40s linear infinite;
+}
+
+@keyframes testimonial-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@layer base {
+  /* Body defaults: 16px minimum for mobile readability, 1.6 line-height for comfort */
+  body {
+    @apply bg-white font-sans text-base leading-relaxed text-slate-700 antialiased;
+  }
+
+  /* Headings share the display face so the type system stays consistent */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading text-primary-900;
+  }
+}
