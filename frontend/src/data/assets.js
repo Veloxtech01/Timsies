@@ -8,7 +8,7 @@
 
 /** Timsies Entirety brand logo — header, footer, favicons, share cards. */
 export const LOGO_URL =
-  "https://res.cloudinary.com/dxguoskll/image/upload/v1785804589/timsies_logo_yhjve2.png";
+  "https://res.cloudinary.com/dxguoskll/image/upload/v1787288761/timisies_logo_wwyvmy.png";
 
 /** Alt text to pair with LOGO_URL wherever it's rendered. */
 export const LOGO_ALT = "Timsies Entirety logo";
