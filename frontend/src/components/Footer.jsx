@@ -1,8 +1,12 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { FiSmartphone, FiMail, FiClock, FiMapPin } from "react-icons/fi";
-import { FaInstagram, FaFacebookF, FaYoutube } from "react-icons/fa6";
-import { FaTwitter } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTiktok,
+  FaLinkedinIn,
+} from "react-icons/fa6";
 import { LOGO_URL, LOGO_ALT } from "../data/assets";
 import footerBg from "../assets/images/footer_bg.png";
 
@@ -29,13 +33,29 @@ const REACH_OUT_ROWS = [
   },
 ];
 
-// Social profiles for the bottom bar — placeholder hrefs until real accounts
-// exist, each labeled for screen readers since the icons carry no text.
+// Social profiles for the bottom bar — each labeled for screen readers
+// since the icons carry no text.
 const SOCIAL_LINKS = [
-  { label: "Instagram", href: "#", Icon: FaInstagram },
-  { label: "Facebook", href: "#", Icon: FaFacebookF },
-  { label: "Twitter", href: "#", Icon: FaTwitter },
-  { label: "YouTube", href: "#", Icon: FaYoutube },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61584010871672",
+    Icon: FaFacebookF,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/timsiesentirety?igsh=ZTR2bWNhdzVqanF5",
+    Icon: FaInstagram,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@timsies.entirety?_r=1&_t=ZS-98yKB1MD1pU",
+    Icon: FaTiktok,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/timsies-entirety/",
+    Icon: FaLinkedinIn,
+  },
 ];
 
 // Shared styling for the mini contact form's fields — dark solid fill with a
@@ -183,7 +203,8 @@ function Footer() {
         </div>
       </div>
 
-      {/* Bottom bar — solid dark strip: social icons left, nav links right */}
+      {/* Bottom bar — solid dark strip: social icons left, nav links right,
+          copyright on its own row underneath */}
       <div className="bg-[#0A0F14] px-4 py-4 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <ul className="flex items-center gap-3">
@@ -215,6 +236,11 @@ function Footer() {
             ))}
           </ul>
         </div>
+
+        {/* Copyright — year computed at render time so it never goes stale */}
+        <p className="mx-auto mt-4 max-w-7xl border-t border-white/10 pt-4 text-center text-xs text-[#9AA5AD]">
+          &copy; {new Date().getFullYear()} Timsies Entirety
+        </p>
       </div>
     </footer>
   );

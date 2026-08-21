@@ -3,10 +3,10 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { FiMenu, FiX } from "react-icons/fi";
 import {
-  FaInstagram,
   FaFacebookF,
-  FaXTwitter,
-  FaYoutube,
+  FaInstagram,
+  FaTiktok,
+  FaLinkedinIn,
 } from "react-icons/fa6";
 import { LOGO_URL, LOGO_ALT } from "../data/assets";
 
@@ -20,13 +20,29 @@ const NAV_LINKS = [
   { name: "FAQ", to: "/faq" },
 ];
 
-// Social profiles. `href` is a placeholder until the real account URLs exist;
-// each carries a label because the links are icon-only (screen readers need it).
+// Social profiles — each carries a label because the links are icon-only
+// (screen readers need it).
 const SOCIAL_LINKS = [
-  { label: "Instagram", href: "#", Icon: FaInstagram },
-  { label: "Facebook", href: "#", Icon: FaFacebookF },
-  { label: "X (Twitter)", href: "#", Icon: FaXTwitter },
-  { label: "YouTube", href: "#", Icon: FaYoutube },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61584010871672",
+    Icon: FaFacebookF,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/timsiesentirety?igsh=ZTR2bWNhdzVqanF5",
+    Icon: FaInstagram,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@timsies.entirety?_r=1&_t=ZS-98yKB1MD1pU",
+    Icon: FaTiktok,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/timsies-entirety/",
+    Icon: FaLinkedinIn,
+  },
 ];
 
 // Shared NavLink classes — active/hover colour is applied per state below.

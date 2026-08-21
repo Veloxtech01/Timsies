@@ -52,7 +52,7 @@ describe('Footer', () => {
 
   it('renders the bottom bar social links', () => {
     renderFooter()
-    for (const label of ['Instagram', 'Facebook', 'Twitter', 'YouTube']) {
+    for (const label of ['Facebook', 'Instagram', 'TikTok', 'LinkedIn']) {
       expect(screen.getByRole('link', { name: label })).toBeInTheDocument()
     }
   })
