@@ -1,9 +1,13 @@
+import { motion } from "motion/react";
 import heroPhoto from "../assets/images/faq_bg.png";
 
 /**
  * FaqHero: page-title banner shown at the top of the FAQ page — full-bleed
  * desk-cleaning photo with a dark blue overlay and a centered "FAQ" heading,
  * same recipe as AboutHero (tinted photo, no badge).
+ *
+ * Heading fades/slides up on mount (not scroll-triggered — already in view
+ * on page load, same precedent as AboutHero/ServicesHero/ContactHero).
  *
  * Takes no props. Returns the <section> markup.
  */
@@ -26,9 +30,14 @@ function FaqHero() {
 
       {/* Page title — Aclonica face matches the no-crossbar "A" used on the
           other hero banners */}
-      <h1 className="relative z-10 font-hero-title text-5xl font-bold text-white drop-shadow-[0_2px_12px_rgba(6,52,74,0.45)] sm:text-6xl lg:text-7xl">
+      <motion.h1
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+        className="relative z-10 font-hero-title text-5xl font-bold text-white drop-shadow-[0_2px_12px_rgba(6,52,74,0.45)] sm:text-6xl lg:text-7xl"
+      >
         FAQ
-      </h1>
+      </motion.h1>
     </section>
   );
 }

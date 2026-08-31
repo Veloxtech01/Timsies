@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { motion } from "motion/react";
 import windowPhoto from "../assets/images/afro-woman-cleaning-window-with-rag-home 1.png";
 
 // Shared styling for every field's control — near-white fill inside the
@@ -44,8 +45,15 @@ function ContactQuote() {
       />
 
       <div className="relative mx-auto grid max-w-5xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        {/* Left — photo plus data-safety disclaimer */}
-        <div>
+        {/* Left — photo plus data-safety disclaimer. Slides in from the left
+            on scroll, mirrored by the form card sliding in from the right,
+            so the two halves converge toward the center. */}
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        >
           <img
             src={windowPhoto}
             alt="Cleaner in gloves wiping down a window"
@@ -55,10 +63,17 @@ function ContactQuote() {
             We acknowledged the safety of your data will be used for just the
             purpose of processing your request.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Right — compact quote form card */}
-        <div className="rounded-2xl bg-[#6E9BB8] p-6 sm:p-8">
+        {/* Right — compact quote form card. Slides in from the right,
+            slightly after the photo, for a staggered convergence. */}
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+          className="rounded-2xl bg-[#6E9BB8] p-6 sm:p-8"
+        >
           <form
             onSubmit={handleSubmit(onSubmit)}
             aria-label="Get a quote"
@@ -92,14 +107,19 @@ function ContactQuote() {
               className={`${FIELD_CLASS} resize-none`}
               {...register("serviceRequired")}
             />
-            <button
+            {/* Slight scale up/down on hover/tap for tactile CTA feedback,
+                same pattern as RequestQuote's submit button */}
+            <motion.button
               type="submit"
-              className="mt-1 w-full cursor-pointer rounded-lg bg-[#EFF9FD] py-2.5 font-sans text-sm font-semibold text-primary-900 transition hover:bg-white"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.2 }}
+              className="mt-1 w-full cursor-pointer rounded-lg bg-[#EFF9FD] py-2.5 font-sans text-sm font-semibold text-primary-900 transition-colors hover:bg-white"
             >
               Get a Quote
-            </button>
+            </motion.button>
           </form>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

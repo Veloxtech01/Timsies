@@ -6,15 +6,28 @@ import { faqs } from "../data/faq";
 /**
  * FaqItem: one accordion row — a button trigger (question) that toggles a
  * height-animated panel (answer). Takes the `item` data, whether it's
- * currently `open`, the `onToggle` handler, and `prefersReducedMotion` to
- * collapse the animation duration. Returns the <li> markup.
+ * currently `open`, the `onToggle` handler, `index` for a small entrance
+ * stagger, and `prefersReducedMotion` to collapse animation durations.
+ * Returns the <li> markup.
  */
-function FaqItem({ item, open, onToggle, prefersReducedMotion }) {
+function FaqItem({ item, open, onToggle, index, prefersReducedMotion }) {
   const panelId = `faq-panel-${item.id}`;
   const triggerId = `faq-trigger-${item.id}`;
 
   return (
-    <li className="border-b border-slate-200">
+    <motion.li
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.5 }}
+      transition={{
+        duration: prefersReducedMotion ? 0 : 0.5,
+        ease: "easeOut",
+        // Small cascade for a row of items entering together; capped via the
+        // modulo so it resets every 6 rows instead of growing for all 15.
+        delay: prefersReducedMotion ? 0 : (index % 6) * 0.06,
+      }}
+      className="border-b border-slate-200"
+    >
       {/* Trigger — full-width row so the tap target stays well over 44px tall */}
       <h3>
         <button
@@ -60,7 +73,7 @@ function FaqItem({ item, open, onToggle, prefersReducedMotion }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </li>
+    </motion.li>
   );
 }
 
@@ -81,10 +94,11 @@ function FaqList() {
       className="px-4 py-16 sm:px-6 lg:px-8"
     >
       <ul className="mx-auto max-w-3xl">
-        {faqs.map((item) => (
+        {faqs.map((item, index) => (
           <FaqItem
             key={item.id}
             item={item}
+            index={index}
             open={openId === item.id}
             onToggle={() =>
               setOpenId((current) => (current === item.id ? null : item.id))
