@@ -33,9 +33,24 @@
   /* Testimonials marquee — CSS (not Framer Motion) so hover can pause via
      animation-play-state and resume from the exact same frame, no JS state. */
   --animate-testimonial-scroll: testimonial-scroll 40s linear infinite;
+
+  /* Service strip marquee — same doubled-track technique as the testimonial
+     scroll above, but never pauses on hover (decorative-only, no per-item
+     interaction to protect). Slower/shorter distance than the testimonial
+     track, so a shorter duration still reads as a slow, steady drift. */
+  --animate-service-scroll: service-scroll 30s linear infinite;
 }
 
 @keyframes testimonial-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes service-scroll {
   from {
     transform: translateX(0);
   }

@@ -4,10 +4,10 @@ import ServiceStrip from './ServiceStrip'
 import { services } from '../data/services'
 
 describe('ServiceStrip', () => {
-  it('renders a label for every service', () => {
+  it('renders a label for every service, plus its hidden duplicate for the loop', () => {
     render(<ServiceStrip />)
     for (const service of services) {
-      expect(screen.getByText(service.label)).toBeInTheDocument()
+      expect(screen.getAllByText(service.label)).toHaveLength(2)
     }
   })
 

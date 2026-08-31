@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import heroPhoto from "../assets/images/meet_img.png";
 
 /**
@@ -29,10 +30,16 @@ function AboutHero() {
       />
 
       {/* Page title — Aclonica face matches the rounded, no-crossbar "A"
-          visible in the source screenshot */}
-      <h1 className="relative z-10 font-hero-title text-5xl font-bold text-white drop-shadow-[0_2px_12px_rgba(6,52,74,0.45)] sm:text-6xl lg:text-7xl">
+          visible in the source screenshot. Fades/slides up on mount (no
+          scroll trigger — this banner is already in view on page load). */}
+      <motion.h1
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+        className="relative z-10 font-hero-title text-5xl font-bold text-white drop-shadow-[0_2px_12px_rgba(6,52,74,0.45)] sm:text-6xl lg:text-7xl"
+      >
         About Us
-      </h1>
+      </motion.h1>
     </section>
   );
 }

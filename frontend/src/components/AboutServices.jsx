@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "motion/react";
 import { aboutServiceCards } from "../data/aboutServiceCards";
 
 // "Our Services" bullet list — specific to this section, kept local rather
@@ -26,34 +27,69 @@ function AboutServices() {
   return (
     <section aria-labelledby="about-services-heading" className="bg-[#EAF1F5] px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        <h2
-          id="about-services-heading"
-          className="text-center font-heading text-3xl font-extrabold uppercase tracking-wide text-primary-900 sm:text-4xl"
+        {/* Heading block — fades/slides up on scroll into view */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          Services
-        </h2>
-        <p className="mt-2 text-center text-base text-slate-600">
-          Professional Services for Spaces That Deserve More
-        </p>
+          <h2
+            id="about-services-heading"
+            className="text-center font-heading text-3xl font-extrabold uppercase tracking-wide text-primary-900 sm:text-4xl"
+          >
+            Services
+          </h2>
+          <p className="mt-2 text-center text-base text-slate-600">
+            Professional Services for Spaces That Deserve More
+          </p>
+        </motion.div>
 
-        {/* Photo cards — one per service category */}
+        {/* Photo cards — one per service category. Each card fades/slides up
+            with a small stagger (index * 0.15s) so they enter in sequence
+            rather than all at once. */}
         <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3">
-          {aboutServiceCards.map((card) => (
-            <figure key={card.id} className="flex flex-col items-center">
-              <img
-                src={card.image}
-                alt={card.imageAlt}
-                className="h-48 w-full rounded-md object-cover"
-              />
-              <figcaption className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary-900">
-                {card.label}
-              </figcaption>
-            </figure>
+          {aboutServiceCards.map((card, index) => (
+            <motion.figure
+              key={card.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.15 }}
+              className="group flex flex-col items-center"
+            >
+              {/* Whole card links to the Services page — figure/figcaption
+                  semantics stay intact, Link just wraps the visible content */}
+              <Link
+                to="/services"
+                className="flex w-full flex-col items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+              >
+                {/* Clip the zoom so the image scales up without spilling past
+                    its rounded corners on hover */}
+                <div className="h-48 w-full overflow-hidden rounded-md shadow-sm transition-shadow duration-300 group-hover:shadow-lg">
+                  <img
+                    src={card.image}
+                    alt={card.imageAlt}
+                    className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-110"
+                  />
+                </div>
+                <figcaption className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary-900">
+                  {card.label}
+                </figcaption>
+              </Link>
+            </motion.figure>
           ))}
         </div>
 
-        {/* Three-column copy block */}
-        <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+        {/* Three-column copy block — same staggered fade/slide-up as the
+            photo cards above */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3"
+        >
           <div>
             <h3 className="font-heading text-base font-bold text-primary-900">Our Services</h3>
             <ul className="mt-3 space-y-1.5 text-sm leading-relaxed text-slate-700">
@@ -95,16 +131,22 @@ function AboutServices() {
               Your space deserves more than a quick cleanup.
             </p>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Closing copy + CTA */}
-        <p className="mx-auto mt-12 max-w-3xl text-center text-sm leading-relaxed text-slate-700">
+        {/* Closing copy + CTA — fades/slides up on scroll */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mx-auto mt-12 max-w-3xl text-center text-sm leading-relaxed text-slate-700"
+        >
           Whether it&apos;s your home, office, shop, or commercial facility,
           Timsies Entirety helps you create an environment where everything
           has its place and cleanliness becomes easier to maintain.
           <br />
           Let&apos;s transform your space.
-        </p>
+        </motion.p>
 
         <div className="mt-6 flex justify-center">
           {/* No dedicated quote page yet — RequestQuote lives on the

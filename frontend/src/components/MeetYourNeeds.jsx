@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "motion/react";
 import bgPhoto from "../assets/images/meet_bg.png";
 import shelfPhoto from "../assets/images/meet_img.png";
 
@@ -26,10 +27,17 @@ function MeetYourNeeds() {
       />
 
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-10 px-4 py-16 sm:px-6 lg:flex-row lg:gap-16 lg:px-8">
-        {/* Left — organizing photo, border already baked into the asset */} 
-        <img
+        {/* Left — organizing photo, border already baked into the asset.
+            Slides in from the left + fades in on scroll; `once: false` lets
+            it replay every time it re-enters the viewport (scrolling back
+            up included), matching the WhyChooseUs photo behavior. */}
+        <motion.img
           src={shelfPhoto}
           alt="Shelving unit neatly organized with folded linens, baskets and storage boxes"
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
           className="w-full max-w-sm shrink-0 lg:w-2/5"
         />
 

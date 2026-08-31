@@ -2,6 +2,7 @@ import HeroSlider from '../components/HeroSlider'
 import ServiceStrip from '../components/ServiceStrip'
 import WhyChooseUs from '../components/WhyChooseUs'
 import MeetYourNeeds from '../components/MeetYourNeeds'
+import MissionVisionValue from '../components/MissionVisionValue'
 import Testimonials from '../components/Testimonials'
 import RequestQuote from '../components/RequestQuote'
 
@@ -25,6 +26,13 @@ function Home() {
 
       {/* Full-bleed intro banner with organizing photo + CTA */}
       <MeetYourNeeds />
+
+      {/* Vision / Mission / Value flip cards, reused from the About page
+          with its own heading here since it stands alone on this page */}
+      <MissionVisionValue
+        heading="Our Vision, Mission & Values"
+        subheading="The principles that guide every project we take on."
+      />
 
       {/* Client testimonial cards */}
       <Testimonials />

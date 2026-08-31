@@ -1,4 +1,5 @@
 import { FaCheck } from "react-icons/fa";
+import { motion } from "motion/react";
 import ceoPhoto from "../assets/images/CEO 2.png";
 
 // Academic & professional credentials — short and specific to this section,
@@ -26,7 +27,15 @@ function CeoProfile() {
       <div className="mx-auto max-w-6xl">
         {/* Two-column row: bio copy left, photo right on lg+ */}
         <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
-          <div className="w-full lg:w-3/5">
+          {/* Bio copy column — fades/slides up on scroll, opposite direction
+              from the photo's slide-in-from-right for a balanced entrance. */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="w-full lg:w-3/5"
+          >
             <h2
               id="ceo-profile-heading"
               className="font-heading text-2xl font-bold text-primary-900"
@@ -93,14 +102,21 @@ function CeoProfile() {
               Our goal is simple: Clear Space. Better Organisation. Greater
               Productivity.
             </p>
-          </div>
+          </motion.div>
 
           {/* Founder photo — teal background is already baked into the
-              asset, same as meet_img.png elsewhere, so it's used as-is */}
+              asset, same as meet_img.png elsewhere, so it's used as-is.
+              Slides in from the right + fades in on scroll; `once: false`
+              lets it replay on re-entry, matching the other home/about
+              photo animations. */}
           <div className="flex w-full items-center justify-center lg:w-2/5">
-            <img
+            <motion.img
               src={ceoPhoto}
               alt="Atim Etetim Okpo, Founder of Timsies Entirety"
+              initial={{ opacity: 0, x: 100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
               className="w-full max-w-sm rounded-lg object-cover"
             />
           </div>

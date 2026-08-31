@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { motion } from "motion/react";
 import { BsEnvelopePaperFill } from "react-icons/bs";
 import { FaChevronDown } from "react-icons/fa";
 import { services } from "../data/services";
@@ -39,27 +40,43 @@ function RequestQuote() {
       className="bg-[#0B3E58] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
     >
       <div className="mx-auto max-w-2xl text-center">
-        {/* Envelope glyph — decorative, heading already conveys the section's purpose */}
-        <BsEnvelopePaperFill
-          aria-hidden="true"
-          className="mx-auto h-16 w-16 text-white"
-        />
-
-        <h2
-          id="request-quote-heading"
-          className="mt-4 font-heading text-3xl font-bold text-white sm:text-4xl"
+        {/* Icon + heading + intro copy fade/slide up together on scroll into
+            view; `once: false` matches the other home sections so it
+            replays on re-entry rather than firing only the first time. */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          Request a Quote
-        </h2>
-        <p className="mt-3 text-base text-[#B9D3E0]">
-          Tell us about your project and we&apos;ll get back to you with a
-          custom estimate.
-        </p>
+          {/* Envelope glyph — decorative, heading already conveys the section's purpose */}
+          <BsEnvelopePaperFill
+            aria-hidden="true"
+            className="mx-auto h-16 w-16 text-white"
+          />
 
-        {/* Form — two-column rows on sm+, stacked on mobile */}
-        <form
+          <h2
+            id="request-quote-heading"
+            className="mt-4 font-heading text-3xl font-bold text-white sm:text-4xl"
+          >
+            Request a Quote
+          </h2>
+          <p className="mt-3 text-base text-[#B9D3E0]">
+            Tell us about your project and we&apos;ll get back to you with a
+            custom estimate.
+          </p>
+        </motion.div>
+
+        {/* Form — two-column rows on sm+, stacked on mobile. Fades/slides up
+            slightly after the heading block (0.2s delay) for a staggered
+            entrance. */}
+        <motion.form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
           className="mt-10 text-left"
         >
           <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
@@ -200,17 +217,21 @@ function RequestQuote() {
               )}
             </div>
 
-            {/* Submit — spans both columns */}
+            {/* Submit — spans both columns. Slight scale up/down on
+                hover/tap gives the primary CTA tactile feedback. */}
             <div className="sm:col-span-2">
-              <button
+              <motion.button
                 type="submit"
-                className="w-full rounded-lg bg-primary-50 py-3 font-sans text-base font-bold text-primary-700 transition hover:bg-white"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.2 }}
+                className="w-full rounded-lg bg-primary-50 py-3 font-sans text-base font-bold text-primary-700 transition-colors hover:bg-white"
               >
                 Get a Free Quote
-              </button>
+              </motion.button>
             </div>
           </div>
-        </form>
+        </motion.form>
       </div>
     </section>
   );

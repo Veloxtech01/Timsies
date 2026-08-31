@@ -1,4 +1,5 @@
 import { FaCheckCircle } from "react-icons/fa";
+import { motion } from "motion/react";
 import { whyChooseUsCards } from "../data/whyChooseUs";
 import workerPhoto from "../assets/images/dl 1.png";
 
@@ -15,7 +16,9 @@ import workerPhoto from "../assets/images/dl 1.png";
  * evenly, with tighter type/padding than a free-flowing stack would use so
  * the copy still fits. The photo stretches to the section's full height,
  * anchored to the right edge instead of shrinking to fit. Below `lg` the
- * height cap is dropped so cards keep their natural (larger) size.
+ * height cap is dropped so cards keep their natural (larger) size. The
+ * right column (photo) slides in from the right and fades in the first
+ * time it scrolls into view.
  *
  * Takes no props. Returns the <section> markup.
  */
@@ -44,7 +47,9 @@ function WhyChooseUs() {
             {whyChooseUsCards.map((card) => (
               <div
                 key={card.id}
-                className="relative flex flex-col justify-center rounded-[17px] bg-white p-3 pr-9 shadow-[0_4px_10px_rgba(2,55,106,0.5)] lg:flex-1 lg:min-h-0"
+                // Hover lift + deepened shadow (CSS-only, no motion component
+                // needed) to give each card a tactile hover response.
+                className="relative flex flex-col justify-center rounded-[17px] bg-white p-3 pr-9 shadow-[0_4px_10px_rgba(2,55,106,0.5)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(2,55,106,0.65)] lg:flex-1 lg:min-h-0"
               >
                 {/* Check-circle glyph, anchored top-right of the card */}
                 <FaCheckCircle
@@ -84,15 +89,23 @@ function WhyChooseUs() {
         {/* Right column — worker photo, hidden from screen readers since the
             cards already carry the section's meaning. Stretches to the
             column's full height and hugs the right edge (object-right)
-            instead of centering, so it reads at full size, not shrunk. */}
-        <div className="flex w-full justify-center lg:w-1/2 lg:justify-end">
+            instead of centering, so it reads at full size, not shrunk.
+            Slides in from the right + fades in once it scrolls into view;
+            `once: true` stops it from replaying on every scroll up/down. */}
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="flex w-full justify-center lg:w-1/2 lg:justify-end"
+        >
           <img
             src={workerPhoto}
             alt=""
             aria-hidden="true"
             className="h-auto max-h-80 w-auto object-contain lg:h-full lg:max-h-none lg:object-right"
           />
-        </div>
+        </motion.div>
       </div>
     </section>
   );
