@@ -52,7 +52,7 @@ function ServicesHero() {
           className="mt-3 max-w-xl text-sm text-white/90 sm:text-base"
         >
           Residential, commercial and specialist cleaning solutions across
-          Lagos.
+          Nigeria.
         </motion.p>
       </div>
     </section>

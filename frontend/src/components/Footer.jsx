@@ -25,7 +25,7 @@ const NAV_LINKS = [
 // adjacent text there; reproduced as-is rather than "corrected").
 const REACH_OUT_ROWS = [
   { Icon: FiSmartphone, text: "Mon-Fri. 9am - 5pm" },
-  { Icon: FiMail, text: "+234 36166653, +234 8111201307" },
+  { Icon: FiMail, text: "+234 803 616 6653, +234 8111201307" },
   { Icon: FiClock, text: "info@timsiesentiretyorganizing.com" },
   {
     Icon: FiMapPin,
