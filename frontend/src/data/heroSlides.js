@@ -10,7 +10,9 @@
  * - subtitle:   supporting copy describing the service
  * - image:      remote (Cloudinary) URL for the slide background
  * - imageAlt:   alt text for accessibility
- * - buttonUrl:  internal route for the slide's CTA (use <Link>, not <a>)
+ * - buttonUrl:  internal route for the slide's CTA (use <Link>, not <a>) —
+ *               currently "/services" for every slide since there's one
+ *               combined Services page, no per-service routes yet
  *
  * The CTA button artwork is shared by every slide, so it lives in
  * `assets.js` as CTA_BUTTON_IMAGE rather than being repeated below.
@@ -26,7 +28,7 @@ export const heroSlides = [
     image:
       "https://res.cloudinary.com/dxguoskll/image/upload/v1785803700/Slider1_oijjnl.png",
     imageAlt: "Professional decluttering service",
-    buttonUrl: "/services/decluttering",
+    buttonUrl: "/services",
   },
   {
     id: 2,
@@ -36,7 +38,7 @@ export const heroSlides = [
     image:
       "https://res.cloudinary.com/dxguoskll/image/upload/v1785803700/Slider2_qwgpws.png",
     imageAlt: "Residential organizing service",
-    buttonUrl: "/services/residential-organizing",
+    buttonUrl: "/services",
   },
   {
     id: 3,
@@ -46,7 +48,7 @@ export const heroSlides = [
     image:
       "https://res.cloudinary.com/dxguoskll/image/upload/v1785803701/slider3_bscapu.png",
     imageAlt: "Commercial organizing service",
-    buttonUrl: "/services/commercial-organizing",
+    buttonUrl: "/services",
   },
 ];
 
