@@ -4,21 +4,20 @@ import { whyChooseUsCards } from "../data/whyChooseUs";
 import workerPhoto from "../assets/images/dl 1.png";
 
 /**
- * WhyChooseUs: home page section pairing a vertical stack of
- * value-proposition cards with a cutout photo of a worker holding cleaning
- * supplies.
+ * WhyChooseUs: home page section pairing a single merged value-proposition
+ * card with a cutout photo of a worker holding cleaning supplies.
  *
- * Renders one white rounded card per entry in `whyChooseUsCards`, each with
- * a top-right check-circle glyph and one or more lead-in/body copy lines,
- * stacked in reading order top to bottom. On large screens the whole
- * section is height-capped at 500px (a compact footprint request) — each
- * card is sized `flex-1` so the 4-card stack shares that fixed height
- * evenly, with tighter type/padding than a free-flowing stack would use so
- * the copy still fits. The photo stretches to the section's full height,
- * anchored to the right edge instead of shrinking to fit. Below `lg` the
- * height cap is dropped so cards keep their natural (larger) size. The
- * right column (photo) slides in from the right and fades in the first
- * time it scrolls into view.
+ * Renders every entry in `whyChooseUsCards` inside one white rounded card
+ * (previously one card per entry), stacked in reading order top to bottom
+ * with a single top-right check-circle glyph. On large screens the whole
+ * section is height-capped at 500px (a compact footprint request) and the
+ * card fills that height (`flex-1`), vertically centering its content.
+ * Below `lg` the height cap is dropped so the card keeps its natural
+ * (larger) size. The card slides in from the left and fades in on every
+ * scroll into view (`once: false` re-triggers it each pass). The photo
+ * stretches to the section's full height, anchored to the right edge
+ * instead of shrinking to fit, and slides in from the right, fading in only
+ * the first time it scrolls into view.
  *
  * Takes no props. Returns the <section> markup.
  */
@@ -40,33 +39,41 @@ function WhyChooseUs() {
             Why Choose Us?
           </h2>
 
-          {/* Card stack — one entry per whyChooseUsCards item, in reading
-              order. `lg:flex-1 lg:min-h-0` makes each card share the 500px
-              column height evenly instead of sizing to its own content. */}
-          <div className="mt-4 flex flex-1 flex-col gap-2 lg:gap-2.5">
-            {whyChooseUsCards.map((card) => (
-              <div
-                key={card.id}
-                // Hover lift + deepened shadow (CSS-only, no motion component
-                // needed) to give each card a tactile hover response.
-                className="relative flex flex-col justify-center rounded-[17px] bg-white p-3 pr-9 shadow-[0_4px_10px_rgba(2,55,106,0.5)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(2,55,106,0.65)] lg:flex-1 lg:min-h-0"
-              >
-                {/* Check-circle glyph, anchored top-right of the card */}
-                <FaCheckCircle
-                  aria-hidden="true"
-                  className="absolute right-3 top-3 h-5 w-5 text-[#006A94]"
-                />
+          {/* Merged card — every whyChooseUsCards entry rendered inside one
+              card, in reading order. Slides in from the left and fades in on
+              every scroll into view; `once: false` re-triggers it each pass
+              (unlike the photo's one-time entrance). `flex-1 min-h-0` makes
+              the card fill the 500px column height on large screens; the
+              larger `lg:gap-6` between entries (and `lg:space-y-2`/`lg:mt-2`
+              within each) spreads the content out to fill more of that
+              height instead of leaving one big centered gap. */}
+          <motion.div
+            initial={{ opacity: 0, x: -100 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="relative mt-4 flex flex-1 flex-col justify-center gap-3 rounded-[17px] bg-white p-4 pr-9 shadow-[0_4px_10px_rgba(2,55,106,0.5)] transition-shadow duration-300 hover:shadow-[0_8px_20px_rgba(2,55,106,0.65)] lg:min-h-0 lg:gap-6"
+          >
+            {/* Check-circle glyph, anchored top-right of the merged card */}
+            <FaCheckCircle
+              aria-hidden="true"
+              className="absolute right-3 top-3 h-5 w-5 text-[#006A94]"
+            />
 
-                {/* Optional card heading — omitted on the "Continuity" card,
-                    whose lead-in line below already carries the title */}
+            {/* One block per whyChooseUsCards entry, each with its optional
+                heading and one or more lead-in/body copy pairs */}
+            {whyChooseUsCards.map((card) => (
+              <div key={card.id}>
+                {/* Optional block heading — omitted on the "Continuity"
+                    entry, whose lead-in line below already carries the title */}
                 {card.heading && (
                   <h3 className="font-heading text-base font-bold uppercase text-[#006A94] lg:text-lg">
                     {card.heading}
                   </h3>
                 )}
 
-                {/* One or more lead-in/body pairs per card */}
-                <div className={card.heading ? "mt-1 space-y-1" : "space-y-1"}>
+                {/* One or more lead-in/body pairs per entry */}
+                <div className={card.heading ? "mt-1 space-y-1 lg:mt-2 lg:space-y-2" : "space-y-1 lg:space-y-2"}>
                   {card.items.map((item) => (
                     <p
                       key={item.lead || item.body}
@@ -83,7 +90,7 @@ function WhyChooseUs() {
                 </div>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Right column — worker photo, hidden from screen readers since the

@@ -35,6 +35,23 @@ function MissionVisionValue({ heading, subheading }) {
 
   const headingId = "mission-vision-value-heading";
 
+  // Grid container variants — staggers each card's entrance once the row
+  // scrolls into view (`once: true` so it only plays the first time).
+  const cardGridVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.6 } },
+  };
+
+  // Per-card variants — each card starts shifted left by its own width plus
+  // the grid gap, so it visually starts stacked under the card to its left
+  // (z-index below it, set per-card in the map) and slides out from behind
+  // it into its own grid slot. On the mobile single-column layout there's no
+  // card to its left, so this just reads as a simple sequential slide-in.
+  const cardVariants = {
+    hidden: { opacity: 0, x: "calc(-100% - 1.5rem)" },
+    visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: "easeOut" } },
+  };
+
   return (
     <section
       aria-label={heading ? undefined : "Our vision, mission and values"}
@@ -65,16 +82,30 @@ function MissionVisionValue({ heading, subheading }) {
           </motion.div>
         )}
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        {missionVisionValueCards.map(({ id, heading: cardHeading, body, icon, bgClass }) => {
+        {/* `overflow-hidden` clips each card's off-screen starting position
+            during the entrance animation so it can't create a page-level
+            horizontal scrollbar. */}
+        <motion.div
+          className="grid grid-cols-1 gap-6 overflow-hidden sm:grid-cols-3"
+          variants={cardGridVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+        >
+        {missionVisionValueCards.map(({ id, heading: cardHeading, body, icon, bgClass }, index) => {
           const isFlipped = flippedId === id;
           return (
             // Card wrapper — fixed min-height so the front/back faces
             // (absolutely positioned inside the flipper below) have
             // somewhere to stretch to regardless of body-copy length.
             // `[perspective:1000px]` gives the rotateY below its 3D depth.
-            <div
+            // `zIndex` descends left to right so each card sits on top of
+            // the one to its right while it's mid-slide (the "from behind"
+            // effect); harmless once settled since the cards no longer overlap.
+            <motion.div
               key={id}
+              variants={cardVariants}
+              style={{ zIndex: missionVisionValueCards.length - index }}
               role="button"
               tabIndex={0}
               aria-pressed={isFlipped}
@@ -85,7 +116,7 @@ function MissionVisionValue({ heading, subheading }) {
                   toggleFlip(id);
                 }
               }}
-              className="group min-h-72 cursor-pointer rounded-lg [perspective:1000px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 sm:min-h-80 lg:min-h-64"
+              className="group relative min-h-72 cursor-pointer rounded-lg [perspective:1000px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 sm:min-h-80 lg:min-h-64"
             >
               {/* Flipper — rotates on click/tap/keyboard (`isFlipped`) or,
                   only on real hover-capable pointers, on hover.
@@ -114,10 +145,10 @@ function MissionVisionValue({ heading, subheading }) {
                   <p className="mt-3 text-sm leading-relaxed text-white/85">{body}</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
